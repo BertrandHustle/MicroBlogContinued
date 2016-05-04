@@ -1,7 +1,6 @@
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.mustache.MustacheTemplateEngine;
-import java.util.ArrayList;
 import java.util.HashMap;
 import static spark.Spark.halt;
 
@@ -58,9 +57,6 @@ public class Main {
 
                     HashMap hash = new HashMap();
 
-                    /*kicks back to home if user hasn't been created (
-                    i.e. if new session tries to access
-                    */
 
                     if(request.session().attributes().contains("user")){
                         //creates message
@@ -70,10 +66,15 @@ public class Main {
 
                         hash.put("user", request.session().attribute("user"));
                         user.list.add(m.message);
+                        m.list.add(m);
 
                         System.out.println(m.message);
                         System.out.println(user.list);
                     }
+
+                    /*kicks back to home if user hasn't been created (
+                    i.e. if new session tries to access
+                    */
 
                     response.redirect("/");
                     halt();
