@@ -8,9 +8,11 @@
     <button type="submit">Submit</button>
 </form>
 <ol>
+    {{#user.list}}
     <li>
-        {{messages}}
+        {{.}}
     </li>
+    {{/user.list}}
 </ol>
 </body>
 </html>

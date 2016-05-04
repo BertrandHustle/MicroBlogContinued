@@ -64,8 +64,15 @@ public class Main {
 
                     if(request.session().attributes().contains("user")){
                         //creates message
-                        Message message = new Message(request.session().attribute("message"));
-                        hash.put("message", request.session().attribute("message"));
+
+                        User user = request.session().attribute("user");
+                        Message m = new Message(request.queryParams("message"));
+
+                        hash.put("user", request.session().attribute("user"));
+                        user.list.add(m.message);
+
+                        System.out.println(m.message);
+                        System.out.println(user.list);
                     }
 
                     response.redirect("/");
