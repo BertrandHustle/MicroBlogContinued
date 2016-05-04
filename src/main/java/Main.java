@@ -68,8 +68,6 @@ public class Main {
                         user.list.add(m.message);
                         m.list.add(m);
 
-                        System.out.println(m.message);
-                        System.out.println(user.list);
                     }
 
                     /*kicks back to home if user hasn't been created (
