@@ -1,10 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
+<html>
 <body>
-
+<h1>
+    {{user.name}}'s Messages
+</h1>
+<form action="/create-messages" method="post">
+    <input type="text" placeholder="Write a message" name="message"/>
+    <button type="submit">Submit</button>
+</form>
+<ol>
+    <li>
+        {{messages}}
+    </li>
+</ol>
 </body>
 </html>
