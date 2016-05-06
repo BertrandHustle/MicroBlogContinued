@@ -25,20 +25,34 @@
             background-color: forestgreen;
         }
     </style>
-<!--
+
     <iframe
             width="0" height="0"
             src="https://www.youtube.com/v/Cz6QhdmJULg?autoplay=1&loop=1&playlist=Cz6QhdmJULg"
             frameborder="0" allowfullscreen>
     </iframe>
--->
+
 </head>
 <h1>
     {{userName}}'s Messages
 </h1>
+
+Create message
 <form action="/create-messages" method="post">
     <input type="text" placeholder="Write a message" name="message"/>
     <button type="submit">Submit</button>
+
+Delete message
+</form><form action="/delete-messages" method="post">
+    <input type="text" placeholder="enter the message ID" name="messageID"/>
+    <button type="delete">Submit</button>
+
+Edit message
+</form><form action="/edit-messages" method="post">
+    <input type="text" placeholder="change your message" name="text"/>
+    <input type="text" placeholder="enter the message ID" name="messageIDedit"/>
+    <button type="edit">Submit</button>
+
 </form>
 <a href="/logout">Logout</a>
 <ol>

@@ -1,16 +1,15 @@
 import spark.ModelAndView;
 import spark.Spark;
 import spark.template.mustache.MustacheTemplateEngine;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
+
 import static spark.Spark.halt;
 
 public class Main {
 
     //think of this as a database
     static HashMap<String, User> userList = new HashMap<>();
-    static ArrayList<String> messages = new ArrayList<>();
-
 
     public static void main(String[] args){
 
@@ -36,6 +35,8 @@ public class Main {
                         String userName = request.session().attribute("userName");
 
                         hash.put("userName", userName);
+                        hash.put("messages", User.messages);
+
                         return new ModelAndView(hash, "messages.mustache");
                     }
 
@@ -122,13 +123,14 @@ public class Main {
 
                     if (request.session().attributes().contains("userName")) {
                         //User user = request.session().attribute(currentUser);
-                        //Message m = new Message(request.queryParams("message"));
-
-                        String m = request.queryParams("message");
+                        Message m = new Message(request.queryParams("message"));
 
                         hash.put("userName", request.session().attribute("userName"));
-                        hash.put("messages", messages);
-                        messages.add(m);
+                        hash.put("messages", User.messages);
+
+
+                        //FIX?
+                        User.messages.add(m.message);
 
                     } else {
 
@@ -146,6 +148,34 @@ public class Main {
 
                 new MustacheTemplateEngine()
         );
+
+        Spark.post(
+                "/delete-messages",
+                (request, response) -> {
+
+                    User.messages.remove(Integer.parseInt(request.queryParams("messageID")) - 1);
+
+                    response.redirect("/");
+                    halt();
+                    return "";
+                }
+        );Spark.post(
+                "/edit-messages",
+                (request, response) -> {
+
+                    User.messages.remove(Integer.parseInt(request.queryParams("messageIDedit")) - 1);
+
+                    Message m = new Message(request.queryParams("text"));
+                    User.messages.add(m.message);
+
+                    response.redirect("/");
+                    halt();
+                    return "";
+                }
+
+        );
+
+
 
         //test cases
 

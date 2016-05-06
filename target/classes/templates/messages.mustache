@@ -39,6 +39,16 @@
 <form action="/create-messages" method="post">
     <input type="text" placeholder="Write a message" name="message"/>
     <button type="submit">Submit</button>
+
+</form><form action="/delete-messages" method="post">
+    <input type="text" placeholder="enter the message ID" name="messageID"/>
+    <button type="delete">Submit</button>
+
+</form><form action="/edit-messages" method="post">
+    <input type="text" placeholder="change your message" name="text"/>
+    <input type="text" placeholder="enter the message ID" name="messageIDedit"/>
+    <button type="edit">Submit</button>
+
 </form>
 <a href="/logout">Logout</a>
 <ol>
