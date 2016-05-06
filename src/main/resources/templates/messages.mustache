@@ -34,7 +34,7 @@
     -->
 </head>
 <h1>
-    {{user.name}}'s Messages
+    {{userName}}'s Messages
 </h1>
 <form action="/create-messages" method="post">
     <input type="text" placeholder="Write a message" name="message"/>
@@ -42,11 +42,11 @@
 </form>
 <a href="/logout">Logout</a>
 <ol>
-    {{#user.list}}
+    {{#messages}}
     <li>
         {{.}}
     </li>
-    {{/user.list}}
+    {{/messages}}
 </ol>
 </body>
 </html>

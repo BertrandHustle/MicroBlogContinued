@@ -1,4 +1,5 @@
 import spark.ModelAndView;
+import spark.Session;
 import spark.Spark;
 import spark.template.mustache.MustacheTemplateEngine;
 import java.util.ArrayList;
@@ -7,9 +8,9 @@ import static spark.Spark.halt;
 
 public class Main {
 
+    //think of this as a database
     static HashMap<String, User> userList = new HashMap<>();
-    static ArrayList<Message> messages = new ArrayList<>();
-    static String currentUser;
+    static ArrayList<String> messages = new ArrayList<>();
 
     public static void main(String[] args){
 
@@ -22,16 +23,19 @@ public class Main {
 
                     HashMap hash = new HashMap();
 
-                    if(!userList.containsKey(currentUser)) {
+                    if(!userList.containsKey("userName")) {
 
                         //returns index
-                        return new ModelAndView(hash, "index.mustache");
 
+                        return new ModelAndView(hash, "index.mustache");
 
                     } else {
 
                         //returns new messages page
 
+                        User user = new User(request.session().attribute("userName"),
+                                request.session().attribute("password"));
+                        hash.put(request.session().attribute("userName"), user );
                         return new ModelAndView(hash, "messages.mustache");
                     }
 
@@ -51,6 +55,9 @@ public class Main {
                     //puts new user in userList
                     userList.put(request.queryParams("name"), user);
 
+                    //attributes (VERB, NOT NOUN) user to session
+                    request.session().attribute("userName", user);
+
                     //redirects to home
                     response.redirect("/");
                     halt();
@@ -68,12 +75,16 @@ public class Main {
                     String userName = request.queryParams("loginName");
                     String password = request.queryParams("loginPassword");
 
-                    User user = userList.get(userName);
+                    User currentUser = userList.get(userName);
 
-                    if (user.getPassword().equals(password) ){
+                    if (currentUser.getPassword().equals(password)){
 
-                        currentUser = request.queryParams("loginName");
-                        response.redirect("/");
+                        User user = new User(request.queryParams("loginName"),
+                                request.queryParams("loginPassword"));
+
+                        request.session().attribute("userName", user);
+
+                        response.redirect("/create-messages");
 
                     } else {
 
@@ -100,11 +111,8 @@ public class Main {
         Spark.get(
                 "/create-messages",
                 (request, response) -> {
-
                     HashMap hash = new HashMap();
-
                     return new ModelAndView(hash, "messages.mustache");
-
                 },
 
                 new MustacheTemplateEngine()
@@ -116,31 +124,42 @@ public class Main {
 
                     HashMap hash = new HashMap();
 
-                    if (request.session().attributes().contains("user")) {
-                        //creates message
+                    if (request.session().attributes().contains("userName")) {
+                        //User user = request.session().attribute(currentUser);
+                        //Message m = new Message(request.queryParams("message"));
 
-                        Message m = new Message(request.queryParams("message"));
+                        String m = request.queryParams("message");
 
-                        hash.put("user", request.session().attribute("user"));
+                        hash.put("userName", request.session().attribute("userName"));
+                        hash.put("messages", m);
                         messages.add(m);
 
-                    }
-
-                    //todo: THIS NEEDS (ELSE)
+                    } else {
 
                     /*kicks back to home if user hasn't been created (
                     i.e. if new session tries to access
                     */
 
+                        response.redirect("/");
+                        halt();
 
-                    response.redirect("/");
-                    halt();
+                    }
 
-                    return "";
-                }
+                    return new ModelAndView(hash, "messages.mustache");
+                },
+
+                new MustacheTemplateEngine()
         );
 
+        //test cases
 
+        User Don = new User("Don", "SCDP");
+        User Peggy = new User("Peggy", "Ted");
+        User Pete = new User("Pete", "Money");
+
+        userList.put("Don", Don);
+        userList.put("Peggy", Peggy);
+        userList.put("Pete", Pete);
 
     }
 

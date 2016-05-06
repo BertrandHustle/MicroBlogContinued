@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 /**
  * User class
@@ -7,6 +8,7 @@ public class User {
     //properties
     String name;
     String password;
+    ArrayList<Message> userMessages = new ArrayList();
 
     public User(String name, String password) {
         this.name = name;
