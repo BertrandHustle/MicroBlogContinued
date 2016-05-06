@@ -25,6 +25,13 @@
             background-color: forestgreen;
         }
     </style>
+    <!--
+    <iframe
+            width="0" height="0"
+            src="https://www.youtube.com/v/Cz6QhdmJULg?autoplay=1&loop=1&playlist=Cz6QhdmJULg"
+            frameborder="0" allowfullscreen>
+    </iframe>
+    -->
 </head>
 <h1>
     {{user.name}}'s Messages
@@ -33,6 +40,7 @@
     <input type="text" placeholder="Write a message" name="message"/>
     <button type="submit">Submit</button>
 </form>
+<a href="/logout">Logout</a>
 <ol>
     {{#user.list}}
     <li>
