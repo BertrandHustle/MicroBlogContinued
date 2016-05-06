@@ -1,5 +1,4 @@
 import spark.ModelAndView;
-import spark.Session;
 import spark.Spark;
 import spark.template.mustache.MustacheTemplateEngine;
 import java.util.ArrayList;
@@ -12,6 +11,7 @@ public class Main {
     static HashMap<String, User> userList = new HashMap<>();
     static ArrayList<String> messages = new ArrayList<>();
 
+
     public static void main(String[] args){
 
         //gets webroot
@@ -23,7 +23,7 @@ public class Main {
 
                     HashMap hash = new HashMap();
 
-                    if(!userList.containsKey("userName")) {
+                    if(!request.session().attributes().contains("userName")) {
 
                         //returns index
 
@@ -33,9 +33,9 @@ public class Main {
 
                         //returns new messages page
 
-                        User user = new User(request.session().attribute("userName"),
-                                request.session().attribute("password"));
-                        hash.put(request.session().attribute("userName"), user );
+                        String userName = request.session().attribute("userName");
+
+                        hash.put("username", userName);
                         return new ModelAndView(hash, "messages.mustache");
                     }
 
@@ -54,9 +54,6 @@ public class Main {
 
                     //puts new user in userList
                     userList.put(request.queryParams("name"), user);
-
-                    //attributes (VERB, NOT NOUN) user to session
-                    request.session().attribute("userName", user);
 
                     //redirects to home
                     response.redirect("/");
@@ -79,12 +76,11 @@ public class Main {
 
                     if (currentUser.getPassword().equals(password)){
 
-                        User user = new User(request.queryParams("loginName"),
-                                request.queryParams("loginPassword"));
+                        //might be PROBLEM
+                        request.session().attribute("userName", userName);
+                        request.session().attribute("password", password);
 
-                        request.session().attribute("userName", user);
-
-                        response.redirect("/create-messages");
+                        response.redirect("/");
 
                     } else {
 
@@ -131,7 +127,7 @@ public class Main {
                         String m = request.queryParams("message");
 
                         hash.put("userName", request.session().attribute("userName"));
-                        hash.put("messages", m);
+                        hash.put("messages", messages);
                         messages.add(m);
 
                     } else {
