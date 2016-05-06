@@ -35,7 +35,7 @@ public class Main {
 
                         String userName = request.session().attribute("userName");
 
-                        hash.put("username", userName);
+                        hash.put("userName", userName);
                         return new ModelAndView(hash, "messages.mustache");
                     }
 
