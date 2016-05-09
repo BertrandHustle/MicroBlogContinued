@@ -33,9 +33,10 @@ public class Main {
                         //returns new messages page
 
                         String userName = request.session().attribute("userName");
+                        User currentUser = userList.get(userName);
 
                         hash.put("userName", userName);
-                        hash.put("messages", User.messages);
+                        hash.put("messages", currentUser.getMessages());
 
                         return new ModelAndView(hash, "messages.mustache");
                     }
@@ -123,14 +124,16 @@ public class Main {
 
                     if (request.session().attributes().contains("userName")) {
                         //User user = request.session().attribute(currentUser);
+
+                        User currentUser = userList.get(request.session().attribute("userName"));
+
                         Message m = new Message(request.queryParams("message"));
 
                         hash.put("userName", request.session().attribute("userName"));
-                        hash.put("messages", User.messages);
-
+                        hash.put("messages", currentUser.getMessages());
 
                         //FIX?
-                        User.messages.add(m.message);
+                        currentUser.getMessages().add(m.message);
 
                     } else {
 
@@ -153,7 +156,8 @@ public class Main {
                 "/delete-messages",
                 (request, response) -> {
 
-                    User.messages.remove(Integer.parseInt(request.queryParams("messageID")) - 1);
+                    User currentUser = userList.get(request.session().attribute("userName"));
+                    currentUser.getMessages().remove(Integer.parseInt(request.queryParams("messageID")) - 1);
 
                     response.redirect("/");
                     halt();
@@ -163,10 +167,11 @@ public class Main {
                 "/edit-messages",
                 (request, response) -> {
 
-                    User.messages.remove(Integer.parseInt(request.queryParams("messageIDedit")) - 1);
+                    User currentUser = userList.get(request.session().attribute("userName"));
+                    currentUser.getMessages().remove(Integer.parseInt(request.queryParams("messageIDedit")) - 1);
 
                     Message m = new Message(request.queryParams("text"));
-                    User.messages.add(m.message);
+                    currentUser.getMessages().add(m.message);
 
                     response.redirect("/");
                     halt();
