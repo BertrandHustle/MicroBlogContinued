@@ -76,7 +76,9 @@ public class Main {
 
                     User currentUser = userList.get(userName);
 
-                    if (currentUser.getPassword().equals(password)){
+                try {
+
+                    if (currentUser.getPassword().equals(password)) {
 
                         //might be PROBLEM
                         request.session().attribute("userName", userName);
@@ -89,6 +91,10 @@ public class Main {
                         response.redirect("/");
 
                     }
+
+                } catch (NullPointerException npe){
+                    response.redirect("/");
+                }
 
                     return "";
 
