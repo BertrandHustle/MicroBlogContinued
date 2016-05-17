@@ -116,7 +116,16 @@ public class Main {
                 "/create-messages",
                 (request, response) -> {
                     HashMap hash = new HashMap();
-                    return new ModelAndView(hash, "messages.mustache");
+
+                    if(request.session().attributes().contains("userName")) {
+
+                        return new ModelAndView(hash, "messages.mustache");
+
+                    } else {
+
+                        return new ModelAndView(hash, "index.mustache");
+
+                    }
                 },
 
                 new MustacheTemplateEngine()
